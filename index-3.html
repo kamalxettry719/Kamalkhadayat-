@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kamal Khadayat — Civil Engineer · Web Developer · Creator</title>
+  <link rel="icon" type="image/png" href="kamal-icon.png"/>
+  <link rel="apple-touch-icon" href="kamal-icon.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --bg:#0f0f14; --card:#16162a; --card2:#1e1e35;
+      --border:rgba(99,102,241,0.2); --text:#e2e8f0; --muted:#94a3b8; --dim:#64748b;
+      --purple:#6366f1; --violet:#a78bfa; --pink:#ec4899;
+      --green:#22c55e; --gold:#eab308; --teal:#14b8a6; --white:#ffffff;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); font-size:15px; line-height:1.7; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--purple); border-radius:3px; }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 64px;
+      background:rgba(15,15,20,0.85);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+      transition:box-shadow .3s;
+    }
+    nav.scrolled { box-shadow:0 4px 30px rgba(0,0,0,0.5); }
+    .nav-logo { font-family:'Poppins',sans-serif; font-size:19px; font-weight:700; color:var(--white); text-decoration:none; display:flex; align-items:center; gap:8px; }
+    .nav-logo-dot { width:8px; height:8px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--pink)); }
+    .nav-logo span { background:linear-gradient(135deg,var(--purple),var(--violet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .nav-links { display:flex; gap:28px; list-style:none; align-items:center; }
+    .nav-links a { font-size:13px; font-weight:500; letter-spacing:.06em; color:var(--muted); text-decoration:none; transition:color .2s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--purple),var(--violet)); border-radius:2px; transform:scaleX(0); transition:transform .2s; }
+    .nav-links a:hover { color:var(--violet); }
+    .nav-links a:hover::after { transform:scaleX(1); }
+    .nav-hire { padding:8px 20px; border-radius:6px; background:linear-gradient(135deg,var(--purple),var(--violet)); color:var(--white) !important; font-weight:600 !important; font-size:12px !important; }
+    .nav-hire::after { display:none !important; }
+    .nav-hire:hover { opacity:.88; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height:100vh;
+      display:grid; grid-template-columns:1fr 1fr;
+      align-items:center;
+      padding:120px 64px 80px;
+      gap:60px; position:relative; overflow:hidden;
+    }
+    .hero-glow1 { position:absolute; top:-150px; right:-100px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle,rgba(99,102,241,.1) 0%,transparent 65%); pointer-events:none; animation:pulse 6s ease-in-out infinite; }
+    .hero-glow2 { position:absolute; bottom:-100px; left:-50px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(236,72,153,.07) 0%,transparent 65%); pointer-events:none; animation:pulse 8s ease-in-out infinite 2s; }
+    @keyframes pulse { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} }
+
+    .hero-left { position:relative; z-index:1; }
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--purple); font-weight:600; margin-bottom:20px; background:rgba(99,102,241,.08); border:1px solid rgba(99,102,241,.2); padding:6px 14px; border-radius:100px; }
+    .hero-name { font-family:'Poppins',sans-serif; font-size:clamp(48px,6vw,84px); font-weight:800; line-height:.95; color:var(--white); margin-bottom:16px; }
+    .hero-name .grad { background:linear-gradient(135deg,var(--purple),var(--violet),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero-name .italic { font-style:italic; font-weight:400; }
+    .hero-roles { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+    .hero-badge { padding:5px 14px; border-radius:100px; font-size:12px; font-weight:600; border:1px solid; }
+    .hb-p { background:rgba(99,102,241,.12); border-color:rgba(99,102,241,.35); color:var(--violet); }
+    .hb-t { background:rgba(20,184,166,.12); border-color:rgba(20,184,166,.35); color:var(--teal); }
+    .hb-k { background:rgba(236,72,153,.12); border-color:rgba(236,72,153,.35); color:var(--pink); }
+    .hero-tagline { max-width:480px; color:var(--muted); font-size:15px; margin-bottom:36px; line-height:1.8; }
+    .hero-cta { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+    .btn-primary { padding:13px 32px; border-radius:8px; background:linear-gradient(135deg,var(--purple),var(--violet)); color:var(--white); font-size:14px; font-weight:600; text-decoration:none; letter-spacing:.04em; transition:opacity .2s,transform .2s; box-shadow:0 4px 20px rgba(99,102,241,.35); }
+    .btn-primary:hover { opacity:.88; transform:translateY(-2px); }
+    .btn-ghost { padding:12px 32px; border-radius:8px; border:1px solid var(--border); color:var(--muted); font-size:14px; font-weight:500; text-decoration:none; transition:border-color .2s,color .2s; }
+    .btn-ghost:hover { border-color:var(--violet); color:var(--violet); }
+    .hero-stats { display:flex; gap:36px; margin-top:44px; padding-top:36px; border-top:1px solid rgba(99,102,241,.12); }
+    .hstat-num { font-family:'Poppins',sans-serif; font-size:28px; font-weight:800; color:var(--white); line-height:1; }
+    .hstat-num span { background:linear-gradient(135deg,var(--purple),var(--violet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hstat-label { font-size:12px; color:var(--dim); margin-top:4px; }
+
+    /* Hero right — photo */
+    .hero-right { position:relative; z-index:1; display:flex; justify-content:center; align-items:center; }
+    .hero-photo-wrap {
+      position:relative; width:360px; height:440px;
+    }
+    .hero-photo-bg {
+      position:absolute; inset:0; border-radius:24px;
+      background:linear-gradient(145deg,rgba(99,102,241,.15),rgba(236,72,153,.1));
+      border:1px solid rgba(99,102,241,.2);
+    }
+    .hero-photo-bg::before {
+      content:''; position:absolute; inset:-1px; border-radius:24px;
+      background:linear-gradient(135deg,var(--purple),var(--pink),var(--teal));
+      z-index:-1; opacity:.3;
+    }
+    .hero-photo-img {
+      width:100%; height:100%; border-radius:24px;
+      object-fit:cover; object-position:top center;
+      display:block; position:relative; z-index:1;
+    }
+    .hero-photo-fallback {
+      width:100%; height:100%; border-radius:24px;
+      background:linear-gradient(145deg,var(--card),var(--card2));
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+      position:relative; z-index:1;
+    }
+    .hero-photo-fallback span:first-child { font-size:80px; }
+    .hero-photo-fallback span:last-child { font-family:'Poppins',sans-serif; font-weight:700; font-size:22px; color:var(--white); }
+    .hero-photo-badge {
+      position:absolute; bottom:-16px; left:50%; transform:translateX(-50%);
+      background:linear-gradient(135deg,var(--card),var(--card2));
+      border:1px solid var(--border);
+      border-radius:12px; padding:10px 20px;
+      display:flex; align-items:center; gap:10px;
+      box-shadow:0 8px 32px rgba(0,0,0,.4);
+      white-space:nowrap; z-index:2;
+    }
+    .badge-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 8px rgba(34,197,94,.6); animation:blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .badge-text { font-size:12px; font-weight:600; color:var(--text); }
+    .hero-deco-card {
+      position:absolute; top:20px; right:-20px;
+      background:var(--card2); border:1px solid var(--border);
+      border-radius:12px; padding:12px 16px;
+      box-shadow:0 8px 24px rgba(0,0,0,.3);
+    }
+    .deco-label { font-size:10px; color:var(--dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+    .deco-val { font-family:'Poppins',sans-serif; font-size:18px; font-weight:800; color:var(--white); }
+    .deco-val span { background:linear-gradient(135deg,var(--purple),var(--violet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── SECTION COMMONS ── */
+    section { padding:96px 64px; }
+    .section-label { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--purple); font-weight:600; margin-bottom:10px; }
+    .section-title { font-family:'Poppins',sans-serif; font-size:clamp(28px,4vw,44px); font-weight:800; color:var(--white); line-height:1.15; margin-bottom:12px; }
+    .grad-line { width:56px; height:3px; background:linear-gradient(90deg,var(--purple),var(--violet)); border-radius:2px; margin-bottom:48px; }
+
+    /* ── ABOUT ── */
+    #about { background:var(--bg); }
+    .about-card { background:linear-gradient(145deg,var(--card),var(--card2)); border:1px solid var(--border); border-radius:20px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,.5); }
+    .about-card-top { height:4px; background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink),var(--teal)); }
+    .about-inner { display:flex; flex-wrap:wrap; }
+    .about-left { flex:0 0 260px; background:linear-gradient(160deg,#1a1a2e,#12122a); border-right:1px solid var(--border); padding:40px 28px; display:flex; flex-direction:column; align-items:center; }
+    .photo-ring { width:150px; height:150px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--violet),var(--pink)); padding:3px; box-shadow:0 0 30px rgba(99,102,241,.4); margin-bottom:18px; position:relative; flex-shrink:0; }
+    .photo-ring img { width:100%; height:100%; border-radius:50%; object-fit:cover; object-position:top; display:block; background:var(--card2); }
+    .photo-fallback { width:100%; height:100%; border-radius:50%; background:linear-gradient(135deg,#1e1e35,#2d2d50); display:none; align-items:center; justify-content:center; font-size:3.5rem; }
+    .online-dot { position:absolute; bottom:8px; right:8px; width:20px; height:20px; border-radius:50%; background:var(--green); border:3px solid #12122a; box-shadow:0 0 10px rgba(34,197,94,.6); animation:blink 2s ease-in-out infinite; }
+    .about-name { font-family:'Poppins',sans-serif; font-size:1.15rem; font-weight:700; color:var(--white); text-align:center; margin-bottom:6px; }
+    .about-badge { background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(167,139,250,.2)); border:1px solid rgba(99,102,241,.3); border-radius:20px; padding:4px 14px; margin-bottom:24px; font-size:.72rem; letter-spacing:1px; color:var(--violet); font-weight:600; }
+    .about-divider { width:100%; height:1px; background:var(--border); margin-bottom:22px; }
+    .info-item { display:flex; align-items:center; gap:12px; margin-bottom:13px; width:100%; }
+    .info-icon { width:34px; height:34px; border-radius:8px; background:rgba(99,102,241,.15); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .info-label { font-size:.65rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-bottom:1px; }
+    .info-val { font-size:.88rem; color:#cbd5e1; font-weight:500; }
+    .about-right { flex:1; padding:40px 36px; display:flex; flex-direction:column; gap:28px; min-width:0; }
+    .about-section-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .about-accent-bar { width:4px; height:22px; border-radius:2px; flex-shrink:0; }
+    .bar-purple { background:linear-gradient(180deg,var(--purple),var(--violet)); }
+    .bar-pink { background:linear-gradient(180deg,var(--pink),#f97316); }
+    .bar-green { background:linear-gradient(180deg,var(--green),var(--teal)); }
+    .about-h4 { font-family:'Poppins',sans-serif; font-size:1rem; font-weight:700; color:var(--white); }
+    .about-bio { color:var(--muted); font-size:.92rem; line-height:1.85; }
+    .about-bio strong { color:var(--violet); }
+    .goal-chips { display:flex; flex-wrap:wrap; gap:10px; }
+    .goal-chip { padding:9px 16px; border-radius:8px; font-size:.82rem; font-weight:600; display:flex; align-items:center; gap:8px; transition:transform .2s; cursor:default; }
+    .goal-chip:hover { transform:translateY(-2px); }
+    .chip-p { background:rgba(99,102,241,.12); border:1px solid rgba(99,102,241,.28); color:var(--violet); }
+    .chip-t { background:rgba(20,184,166,.12); border:1px solid rgba(20,184,166,.28); color:var(--teal); }
+    .chip-g { background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.28); color:var(--green); }
+    .interest-grid { display:flex; flex-wrap:wrap; gap:10px; }
+    .interest-tag { border-radius:10px; padding:9px 13px; display:flex; align-items:center; gap:8px; background:rgba(99,102,241,.1); border:1px solid rgba(99,102,241,.25); }
+    .int-cat { font-size:.68rem; color:var(--purple); font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+    .int-val { font-size:.82rem; color:#cbd5e1; }
+    .contact-chips { display:flex; flex-wrap:wrap; gap:10px; }
+    .contact-chip { display:flex; align-items:center; gap:9px; padding:10px 16px; border-radius:10px; color:var(--text); text-decoration:none; font-size:.84rem; font-weight:500; transition:all .2s; }
+    .cc-email { background:rgba(234,179,8,.08); border:1px solid rgba(234,179,8,.25); }
+    .cc-email:hover { background:rgba(234,179,8,.18); border-color:rgba(234,179,8,.6); transform:translateY(-2px); }
+    .cc-wa { background:rgba(37,211,102,.08); border:1px solid rgba(37,211,102,.25); }
+    .cc-wa:hover { background:rgba(37,211,102,.18); border-color:rgba(37,211,102,.6); transform:translateY(-2px); }
+    .cc-web { background:rgba(99,102,241,.08); border:1px solid rgba(99,102,241,.25); }
+    .cc-web:hover { background:rgba(99,102,241,.18); border-color:rgba(99,102,241,.6); transform:translateY(-2px); }
+
+    /* ── SKILLS ── */
+    #skills { background:#0b0b10; }
+    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .skill-card { background:var(--card); padding:32px 28px; border-radius:16px; border:1px solid transparent; transition:border-color .25s,transform .25s,background .25s; }
+    .skill-card:hover { background:var(--card2); border-color:var(--border); transform:translateY(-4px); }
+    .skill-emoji { font-size:2rem; margin-bottom:16px; }
+    .skill-name { font-family:'Poppins',sans-serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:8px; }
+    .skill-desc { font-size:13px; color:var(--dim); margin-bottom:18px; line-height:1.6; }
+    .skill-bar { height:3px; background:rgba(255,255,255,.07); border-radius:2px; overflow:hidden; }
+    .skill-fill { height:100%; border-radius:2px; }
+    .fill-purple { background:linear-gradient(90deg,var(--purple),var(--violet)); }
+    .fill-teal { background:linear-gradient(90deg,var(--teal),#22c55e); }
+    .fill-pink { background:linear-gradient(90deg,var(--pink),#f97316); }
+
+    /* ── GALLERY ── */
+    #gallery { background:var(--bg); }
+    .gallery-intro { font-size:13px; color:var(--dim); margin-bottom:40px; background:rgba(99,102,241,.07); border:1px solid var(--border); display:inline-block; padding:9px 18px; border-radius:8px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .g-item { aspect-ratio:1; border-radius:14px; overflow:hidden; position:relative; background:var(--card); border:1px solid rgba(99,102,241,.15); transition:transform .3s,box-shadow .3s; }
+    .g-item:hover { transform:scale(1.03); box-shadow:0 12px 40px rgba(99,102,241,.2); }
+    .g-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    .g-item.empty { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; border-style:dashed; border-color:rgba(99,102,241,.25); }
+    .g-item.empty span:first-child { font-size:2rem; opacity:.4; }
+    .g-item.empty span:last-child { font-size:11px; color:var(--dim); letter-spacing:.05em; }
+    .g-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.6) 0%,transparent 50%); opacity:0; transition:opacity .3s; display:flex; align-items:flex-end; padding:14px; }
+    .g-item:hover .g-overlay { opacity:1; }
+    .g-caption { font-size:12px; color:var(--white); font-weight:500; }
+
+    /* ── PROJECTS ── */
+    #projects { background:#0b0b10; }
+    .projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .proj-card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; transition:border-color .25s,transform .25s; }
+    .proj-card:hover { border-color:rgba(99,102,241,.5); transform:translateY(-5px); box-shadow:0 16px 48px rgba(0,0,0,.4); }
+    .proj-top { height:4px; }
+    .pt-purple { background:linear-gradient(90deg,var(--purple),var(--violet)); }
+    .pt-pink { background:linear-gradient(90deg,var(--pink),#f97316); }
+    .pt-teal { background:linear-gradient(90deg,var(--teal),#22c55e); }
+    .pt-gold { background:linear-gradient(90deg,var(--gold),#f97316); }
+    .proj-body { padding:26px; }
+    .proj-icon { font-size:2.2rem; margin-bottom:12px; }
+    .proj-cat { font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--purple); font-weight:600; margin-bottom:8px; }
+    .proj-title { font-family:'Poppins',sans-serif; font-size:1.1rem; font-weight:700; color:var(--white); margin-bottom:8px; }
+    .proj-desc { font-size:13px; color:var(--dim); line-height:1.7; margin-bottom:16px; }
+    .proj-link { font-size:13px; font-weight:600; color:var(--violet); text-decoration:none; letter-spacing:.04em; transition:color .2s; }
+    .proj-link:hover { color:var(--pink); }
+
+    /* ── TIMELINE ── */
+    #experience { background:var(--bg); }
+    .timeline { max-width:760px; }
+    .tl-item { display:grid; grid-template-columns:140px 1fr; gap:32px; padding:28px 0; border-top:1px solid rgba(99,102,241,.12); transition:background .2s; }
+    .tl-item:last-child { border-bottom:1px solid rgba(99,102,241,.12); }
+    .tl-year { font-size:12px; color:var(--dim); padding-top:5px; line-height:1.5; }
+    .tl-role { font-family:'Poppins',sans-serif; font-size:1.05rem; font-weight:700; color:var(--white); margin-bottom:4px; }
+    .tl-org { font-size:12px; color:var(--purple); font-weight:600; letter-spacing:.04em; margin-bottom:10px; }
+    .tl-desc { font-size:13.5px; color:var(--muted); line-height:1.7; }
+
+    /* ── CONTACT ── */
+    #contact { background:linear-gradient(145deg,var(--card),var(--card2)); border-top:1px solid var(--border); text-align:center; padding:96px 64px; }
+    .contact-grid { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:44px; }
+    .cta-card { display:flex; align-items:center; gap:12px; padding:14px 26px; border-radius:12px; text-decoration:none; color:var(--text); font-size:14px; font-weight:500; border:1px solid var(--border); background:rgba(255,255,255,.03); transition:all .25s; }
+    .cta-card:hover { border-color:var(--violet); background:rgba(99,102,241,.1); transform:translateY(-3px); box-shadow:0 8px 24px rgba(99,102,241,.2); }
+
+    /* ── FOOTER ── */
+    footer { background:#0a0a0f; border-top:1px solid rgba(99,102,241,.1); padding:22px 64px; display:flex; justify-content:space-between; align-items:center; }
+    footer p { font-size:12px; color:var(--dim); }
+    footer a { color:var(--dim); text-decoration:none; font-size:12px; transition:color .2s; }
+    footer a:hover { color:var(--violet); }
+
+    /* ── ANIMATIONS ── */
+    .fade-in { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s ease; }
+    .fade-in.visible { opacity:1; transform:none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:1024px) {
+      #hero { grid-template-columns:1fr; padding:120px 40px 80px; }
+      .hero-right { display:none; }
+    }
+    @media (max-width:900px) {
+      nav { padding:16px 24px; }
+      .nav-links { display:none; }
+      section { padding:72px 24px; }
+      .skills-grid { grid-template-columns:1fr 1fr; }
+      .projects-grid { grid-template-columns:1fr; }
+      .tl-item { grid-template-columns:1fr; gap:4px; }
+      .gallery-grid { grid-template-columns:repeat(3,1fr); }
+      footer { flex-direction:column; gap:8px; text-align:center; }
+    }
+    @media (max-width:640px) {
+      .about-inner { flex-direction:column; }
+      .about-left { flex:1; border-right:none; border-bottom:1px solid var(--border); }
+      .skills-grid { grid-template-columns:1fr; }
+      .gallery-grid { grid-template-columns:repeat(2,1fr); }
+      .hero-stats { gap:20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    Kamal <span>Khadayat</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#gallery">Photos</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Journey</a></li>
+    <li><a href="#contact" class="nav-hire">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-left fade-in">
+    <div class="hero-eyebrow">📍 Darchula, Nepal</div>
+    <h1 class="hero-name">
+      Kamal<br>
+      <span class="grad italic">Khadayat</span>
+    </h1>
+    <div class="hero-roles">
+      <span class="hero-badge hb-p">⚙️ Civil Eng. Student</span>
+      <span class="hero-badge hb-t">💻 Web Developer</span>
+      <span class="hero-badge hb-k">🎬 YouTube Creator</span>
+    </div>
+    <p class="hero-tagline">Class 11 topper from Nepal — building a future in civil engineering, web development, and educational content creation. Serious goals. Consistent effort. Step by step.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-ghost">Get in Touch</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-num">#<span>1</span></div>
+        <div class="hstat-label">Class Topper</div>
+      </div>
+      <div>
+        <div class="hstat-num"><span>2+</span></div>
+        <div class="hstat-label">Web Projects</div>
+      </div>
+      <div>
+        <div class="hstat-num"><span>100+</span></div>
+        <div class="hstat-label">YT Subscribers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: PHOTO -->
+  <div class="hero-right fade-in">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-bg"></div>
+      <img
+        src="kamal.png"
+        alt="Kamal Khadayat"
+        class="hero-photo-img"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+      >
+      <div class="hero-photo-fallback" style="display:none;">
+        <span>🧑‍💻</span>
+        <span>Kamal Khadayat</span>
+      </div>
+      <div class="hero-photo-badge">
+        <div class="badge-dot"></div>
+        <div class="badge-text">Available for Projects</div>
+      </div>
+      <div class="hero-deco-card">
+        <div class="deco-label">Class Rank</div>
+        <div class="deco-val"><span>#1</span> Topper</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div style="text-align:center; margin-bottom:48px;" class="fade-in">
+    <p class="section-label">GET TO KNOW ME</p>
+    <h2 class="section-title">About <span style="background:linear-gradient(135deg,var(--purple),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Me</span></h2>
+    <div class="grad-line" style="margin:14px auto 0;"></div>
+  </div>
+  <div class="about-card fade-in">
+    <div class="about-card-top"></div>
+    <div class="about-inner">
+      <!-- LEFT -->
+      <div class="about-left">
+        <div class="photo-ring">
+          <img src="kamal.png" alt="Kamal Khadayat"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="photo-fallback">🧑‍💻</div>
+          <div class="online-dot"></div>
+        </div>
+        <div class="about-name">Kamal Khadayat</div>
+        <div class="about-badge">Civil Eng. · Web Dev · Creator</div>
+        <div class="about-divider"></div>
+        <div class="info-item"><div class="info-icon">📍</div><div><div class="info-label">Location</div><div class="info-val">Darchula, Nepal</div></div></div>
+        <div class="info-item"><div class="info-icon">🎂</div><div><div class="info-label">Birthday</div><div class="info-val">May 26</div></div></div>
+        <div class="info-item"><div class="info-icon">📚</div><div><div class="info-label">Education</div><div class="info-val">Class 11 — Civil Eng.</div></div></div>
+        <div class="info-item"><div class="info-icon">🏆</div><div><div class="info-label">Rank</div><div class="info-val">Class Topper</div></div></div>
+        <div class="info-item"><div class="info-icon">🗣️</div><div><div class="info-label">Language</div><div class="info-val">Nepali</div></div></div>
+        <div class="info-item"><div class="info-icon">📱</div><div><div class="info-label">Social</div><div class="info-val">@kamalxpress1</div></div></div>
+        <div class="info-item"><div class="info-icon">🎵</div><div><div class="info-label">Hobby</div><div class="info-val">Listening to Music</div></div></div>
+      </div>
+      <!-- RIGHT -->
+      <div class="about-right">
+        <div>
+          <div class="about-section-head"><div class="about-accent-bar bar-purple"></div><h4 class="about-h4">Who I Am</h4></div>
+          <p class="about-bio">I'm <strong>Kamal Khadayat</strong> — a Class 11 civil engineering student from Nepal with a strong interest in mathematics, engineering concepts, and web development. I'm a <strong>topper in my class</strong> and focused on building a strong foundation for my future career as a civil engineer.</p>
+          <br>
+          <p class="about-bio">Along with my studies, I work as a <strong>web developer</strong> and manage projects like <strong>kamal1.com.np</strong>. I also create educational and motivational content on <strong>YouTube</strong> — mainly focused on helping students stay disciplined, motivated, and goal-oriented.</p>
+          <br>
+          <p class="about-bio">I prefer practical learning, clear explanations, and real-life applications of knowledge. I'm serious about my goals, consistent in my efforts, and always improving — step by step.</p>
+        </div>
+        <div>
+          <div class="about-section-head"><div class="about-accent-bar bar-pink"></div><h4 class="about-h4">My Goals</h4></div>
+          <div class="goal-chips">
+            <span class="goal-chip chip-p">🏗️ Top Civil Engineer</span>
+            <span class="goal-chip chip-t">💻 Professional Web Developer</span>
+            <span class="goal-chip chip-g">🎬 Top Educational Creator</span>
+          </div>
+        </div>
+        <div>
+          <div class="about-section-head"><div class="about-accent-bar bar-pink"></div><h4 class="about-h4">My Interests</h4></div>
+          <div class="interest-grid">
+            <div class="interest-tag"><span style="font-size:1.2rem;">🎵</span><div><div class="int-cat">Music</div><div class="int-val">Bhatbhatey Ma</div></div></div>
+            <div class="interest-tag" style="background:rgba(236,72,153,.1);border-color:rgba(236,72,153,.25);"><span style="font-size:1.2rem;">🎬</span><div><div class="int-cat" style="color:var(--pink);">Movies</div><div class="int-val">Manjhi · 12th Fail · 3 Idiots</div></div></div>
+            <div class="interest-tag" style="background:rgba(234,179,8,.1);border-color:rgba(234,179,8,.25);"><span style="font-size:1.2rem;">🎮</span><div><div class="int-cat" style="color:var(--gold);">Games</div><div class="int-val">Wii Chess</div></div></div>
+            <div class="interest-tag" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.25);"><span style="font-size:1.2rem;">⚽</span><div><div class="int-cat" style="color:#ef4444;">Sports</div><div class="int-val">Cristiano Ronaldo</div></div></div>
+            <div class="interest-tag" style="background:rgba(20,184,166,.1);border-color:rgba(20,184,166,.25);"><span style="font-size:1.2rem;">✈️</span><div><div class="int-cat" style="color:var(--teal);">Travel</div><div class="int-val">Lumbini Zone</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-section-head"><div class="about-accent-bar bar-green"></div><h4 class="about-h4">Get In Touch</h4></div>
+          <div class="contact-chips">
+            <a href="mailto:kamalxettry719@gmail.com" class="contact-chip cc-email">✉️ kamalxettry719@gmail.com</a>
+            <a href="https://wa.me/9779763940205" target="_blank" class="contact-chip cc-wa">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              +977 976-3940205
+            </a>
+            <a href="https://www.kamal1.com.np" target="_blank" class="contact-chip cc-web">🌐 kamal1.com.np</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="fade-in" style="text-align:center; margin-bottom:48px;">
+    <p class="section-label">What I Do</p>
+    <h2 class="section-title">Skills &amp; Expertise</h2>
+    <div class="grad-line" style="margin:14px auto 0;"></div>
+  </div>
+  <div class="skills-grid fade-in">
+    <div class="skill-card"><div class="skill-emoji">🏗️</div><div class="skill-name">Civil Engineering</div><div class="skill-desc">Structural concepts, mathematics, surveying, and engineering principles from Class 11 curriculum.</div><div class="skill-bar"><div class="skill-fill fill-purple" style="width:88%"></div></div></div>
+    <div class="skill-card"><div class="skill-emoji">➗</div><div class="skill-name">Mathematics</div><div class="skill-desc">Strong foundation in algebra, calculus, and applied maths — class topper level understanding.</div><div class="skill-bar"><div class="skill-fill fill-teal" style="width:95%"></div></div></div>
+    <div class="skill-card"><div class="skill-emoji">💻</div><div class="skill-name">Web Development</div><div class="skill-desc">Building and managing websites like kamal1.com.np — HTML, CSS, and frontend development.</div><div class="skill-bar"><div class="skill-fill fill-purple" style="width:80%"></div></div></div>
+    <div class="skill-card"><div class="skill-emoji">🎬</div><div class="skill-name">Content Creation</div><div class="skill-desc">Educational and motivational YouTube content focused on student discipline and goal-setting.</div><div class="skill-bar"><div class="skill-fill fill-pink" style="width:82%"></div></div></div>
+    <div class="skill-card"><div class="skill-emoji">🎯</div><div class="skill-name">Goal Setting</div><div class="skill-desc">Consistent, practical approach to long-term planning — turning big goals into daily actions.</div><div class="skill-bar"><div class="skill-fill fill-teal" style="width:90%"></div></div></div>
+    <div class="skill-card"><div class="skill-emoji">🧠</div><div class="skill-name">Problem Solving</div><div class="skill-desc">Analytical thinking applied to both engineering problems and real-life challenges.</div><div class="skill-bar"><div class="skill-fill fill-purple" style="width:85%"></div></div></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="fade-in">
+    <p class="section-label">My Photos</p>
+    <h2 class="section-title">Photo Gallery</h2>
+    <div class="grad-line"></div>
+    <!--
+      📸 PHOTO INSTRUCTIONS:
+      Put your photo files in the same folder as this index.html.
+      Name them: photo1.jpg, photo2.jpg ... photo8.jpg
+      (or .png — just update the src below)
+    -->
+    <div class="gallery-intro">📸 Add your photos — name them photo1.jpg to photo8.jpg and put them in the same folder</div>
+  </div>
+  <div class="gallery-grid fade-in">
+    <div class="g-item">
+      <img src="photo1.jpg" alt="Photo 1" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo1.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 1</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo2.jpg" alt="Photo 2" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo2.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 2</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo3.jpg" alt="Photo 3" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo3.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 3</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo4.jpg" alt="Photo 4" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo4.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 4</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo5.jpg" alt="Photo 5" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo5.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 5</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo6.jpg" alt="Photo 6" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo6.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 6</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo7.jpg" alt="Photo 7" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo7.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 7</span></div>
+    </div>
+    <div class="g-item">
+      <img src="photo8.jpg" alt="Photo 8" onerror="this.parentElement.classList.add('empty');this.style.display='none';this.parentElement.innerHTML='<span>📷</span><span>photo8.jpg</span>'">
+      <div class="g-overlay"><span class="g-caption">Photo 8</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="fade-in" style="text-align:center; margin-bottom:48px;">
+    <p class="section-label">My Work</p>
+    <h2 class="section-title">Projects</h2>
+    <div class="grad-line" style="margin:14px auto 0;"></div>
+  </div>
+  <div class="projects-grid fade-in">
+    <div class="proj-card"><div class="proj-top pt-purple"></div><div class="proj-body"><div class="proj-icon">🌐</div><div class="proj-cat">Web Development</div><div class="proj-title">kamal1.com.np</div><div class="proj-desc">Personal website built and managed independently. Covers content, design, and web project management from Nepal.</div><a href="https://www.kamal1.com.np" target="_blank" class="proj-link">Visit Site →</a></div></div>
+    <div class="proj-card"><div class="proj-top pt-pink"></div><div class="proj-body"><div class="proj-icon">🎬</div><div class="proj-cat">YouTube · Education</div><div class="proj-title">Educational YouTube Channel</div><div class="proj-desc">Creating motivational and educational videos for students — focused on discipline, focus, and achieving goals.</div><a href="https://youtube.com/@kamalxpress1" target="_blank" class="proj-link">Watch Videos →</a></div></div>
+    <div class="proj-card"><div class="proj-top pt-teal"></div><div class="proj-body"><div class="proj-icon">🏗️</div><div class="proj-cat">Civil Engineering</div><div class="proj-title">Engineering Studies</div><div class="proj-desc">Class 11 civil engineering — consistently ranked first in class with strong performance in maths and applied science.</div><a href="#about" class="proj-link">Learn More →</a></div></div>
+    <div class="proj-card"><div class="proj-top pt-gold"></div><div class="proj-body"><div class="proj-icon">🌍</div><div class="proj-cat">New Domain</div><div class="proj-title">kamalkhadayat.com.np</div><div class="proj-desc">This website! A personal portfolio domain showcasing all my work, skills, journey, and goals in one professional place.</div><a href="#hero" class="proj-link">You're Here →</a></div></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="fade-in">
+    <p class="section-label">My Journey</p>
+    <h2 class="section-title">Experience &amp; Education</h2>
+    <div class="grad-line"></div>
+  </div>
+  <div class="timeline fade-in">
+    <div class="tl-item"><div class="tl-year">2024 — Present</div><div><div class="tl-role">Class 11 Student — Civil Engineering</div><div class="tl-org">Nepal 🇳🇵</div><div class="tl-desc">Pursuing civil engineering with top academic performance. Focused on mathematics, structural concepts, and building a foundation for a professional engineering career.</div></div></div>
+    <div class="tl-item"><div class="tl-year">2024 — Present</div><div><div class="tl-role">Web Developer</div><div class="tl-org">Freelance / kamal1.com.np</div><div class="tl-desc">Building and managing web projects independently. Designing and developing websites with practical, real-world skills alongside formal education.</div></div></div>
+    <div class="tl-item"><div class="tl-year">2023 — Present</div><div><div class="tl-role">YouTube Content Creator</div><div class="tl-org">@kamalxpress1</div><div class="tl-desc">Creating educational and motivational content for students in Nepal and beyond. Topics include discipline, goal-setting, and academic success strategies.</div></div></div>
+    <div class="tl-item"><div class="tl-year">2026</div><div><div class="tl-role">Launched kamalkhadayat.com.np</div><div class="tl-org">Personal Portfolio Domain</div><div class="tl-desc">Registered and launched a dedicated personal portfolio website to showcase all projects, skills, and journey in one professional platform.</div></div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Let's Connect</p>
+  <h2 class="section-title" style="color:var(--white);">Have something in mind?</h2>
+  <p style="color:var(--muted); margin-top:12px;">Whether it's a web project, collaboration, or just to say hello — reach out!</p>
+  <div class="contact-grid fade-in">
+    <a href="mailto:kamalxettry719@gmail.com" class="cta-card">✉️ kamalxettry719@gmail.com</a>
+    <a href="https://wa.me/9779763940205" target="_blank" class="cta-card">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <a href="https://www.kamal1.com.np" target="_blank" class="cta-card">🌐 kamal1.com.np</a>
+    <a href="https://youtube.com/@kamalxpress1" target="_blank" class="cta-card">▶️ YouTube</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Kamal Khadayat. All rights reserved.</p>
+  <a href="https://kamalkhadayat.com.np">kamalkhadayat.com.np</a>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
